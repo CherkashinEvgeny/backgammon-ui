@@ -1,23 +1,25 @@
 <template>
   <v-app>
-    <v-main>
-      <HelloWorld/>
-    </v-main>
+    <Field v-bind="field"></Field>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Field from "./components/Field.vue";
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
-    HelloWorld,
+    Field: Field,
   },
 
-  data: () => ({
-    //
-  }),
-}
+  data: function () {
+    return {
+      field: {
+        cells: new Array(24).fill({}),
+      },
+    };
+  },
+};
 </script>
