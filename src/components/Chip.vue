@@ -1,8 +1,8 @@
 <template lang="html">
-    <v-img 
-      class="chip"
-      :src="src"
-    ></v-img>
+  <v-img 
+    class="chip"
+    :src="src"
+  ></v-img>
 </template>
 <script>
 export default {
