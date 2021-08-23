@@ -1,39 +1,35 @@
 <template lang="html">
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-row>
-          <v-col v-for="cell in leftTopCells" :key="cell.index">
-            <cell v-bind="cell">
-            </cell>
-          </v-col>
-        </v-row>
-        <v-spacer></v-spacer>
-        <v-row>
-          <v-col v-for="cell in leftBottomCells" :key="cell.index">
-            <cell v-bind="cell">
-            </cell>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-divider vertical></v-divider>
-      <v-col>
-        <v-row>
-          <v-col v-for="cell in rightTopCells" :key="cell.index">
-            <cell v-bind="cell">
-            </cell>
-          </v-col>
-        </v-row>
-        <v-spacer></v-spacer>
-        <v-row>
-          <v-col v-for="cell in rightBottomCells" :key="cell.index">
-            <cell v-bind="cell">
-            </cell>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row>
+    <v-col class="d-flex flex-column">
+      <v-row class="align-start">
+        <v-col v-for="cell in leftTopCells" :key="cell.index">
+          <cell v-bind="cell">
+          </cell>
+        </v-col>
+      </v-row>
+      <v-row class="align-end">
+        <v-col v-for="cell in leftBottomCells" :key="cell.index">
+          <cell v-bind="cell">
+          </cell>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-divider vertical></v-divider>
+    <v-col class="d-flex flex-column">
+      <v-row class="align-start">
+        <v-col v-for="cell in rightTopCells" :key="cell.index">
+          <cell v-bind="cell">
+          </cell>
+        </v-col>
+      </v-row>
+      <v-row class="align-end">
+        <v-col v-for="cell in rightBottomCells" :key="cell.index">
+          <cell v-bind="cell">
+          </cell>
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import Cell from "./Cell.vue";
