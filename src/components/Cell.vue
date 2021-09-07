@@ -1,14 +1,29 @@
 <template lang="html">
-  <div>
+  <drag-and-drop :values="test">
     <chip side="white"></chip>
-  </div>
+  </drag-and-drop>
 </template>
 <script>
+import DragAndDrop from "./DragAndDrop.vue";
 import Chip from "./Chip.vue";
 
 export default {
   components: {
-    chip: Chip,
+    "drag-and-drop": DragAndDrop,
+    "chip": Chip,
+  },
+  props: {
+    values: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+  },
+  data: function () {
+    return {
+      test: [1, 2],
+    };
   },
 };
 </script>
