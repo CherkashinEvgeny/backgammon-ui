@@ -7,15 +7,24 @@ import { render } from "vue";
 
 var overlayRef = null;
 
-// const DraggableValue = defineComponent((props, context) => {
-//   return h(
-//     `div`,
-//     context.attrs,
-//     context.$slots.default({
-//       value: props?.value,
-//     })
-//   );
-// });
+const renderSlot = (slot, { props, context }) => {
+  const rootElement = document.createElement("div");
+  const vNodes = slot(props);
+  const elements = [];
+  vNodes.forEach((vNode) => {
+    vNode.appContext = context;
+    const element = document.createElement("div");
+    elements.push(element);
+    render(vNode, element);
+    rootElement.appendChild(element);
+  });
+  const destroy = () => {
+    elements.forEach((element) => {
+      render(null, element);
+    });
+  };
+  return { element: rootElement, destroy };
+};
 
 export default {
   props: {
@@ -58,60 +67,52 @@ export default {
     initValues() {
       this.values.forEach((value) => {
         let dragging = false;
-        // console.log(this._.appContext);
-        const draggableValueNode = this.$slots.default({
-          value,
-        })[0];
-        draggableValueNode.appContext = this._.appContext;
-        const draggableValueElement = document.createElement("div");
-        render(draggableValueNode, draggableValueElement);
-        // const draggableValue = new DraggableValue({
-        //   propsData: { value },
-        // });
-        // draggableValue.$slots.default = this.$slots.default;
-        // draggableValue.$mount();
-        this.$el.appendChild(draggableValueElement);
+        const { element } = renderSlot(this.$slots.default, {
+          props: { value },
+          context: this._.appContext,
+        });
+        this.$el.appendChild(element);
         const onDraggedElementMove = (event) => {
           if (!dragging) {
             return;
           }
-          draggableValueElement.style.left = `${event.x}px`;
-          draggableValueElement.style.top = `${event.y}px`;
+          element.style.left = `${event.x}px`;
+          element.style.top = `${event.y}px`;
         };
-        draggableValueElement.onmousedown = (event) => {
+        element.onmousedown = (event) => {
           dragging = true;
 
-          const heightBeforeDragging = draggableValueElement.clientHeight;
-          const widthBeforeDragging = draggableValueElement.clientWidth;
+          const heightBeforeDragging = element.clientHeight;
+          const widthBeforeDragging = element.clientWidth;
 
-          this.$el.removeChild(draggableValueElement);
+          this.$el.removeChild(element);
 
-          draggableValueElement.style.height = `${heightBeforeDragging}px`;
-          draggableValueElement.style.width = `${widthBeforeDragging}px`;
-          draggableValueElement.style.position = "absolute";
-          draggableValueElement.style.left = `${event.x}px`;
-          draggableValueElement.style.top = `${event.y}px`;
+          element.style.height = `${heightBeforeDragging}px`;
+          element.style.width = `${widthBeforeDragging}px`;
+          element.style.position = "absolute";
+          element.style.left = `${event.x}px`;
+          element.style.top = `${event.y}px`;
 
           overlayRef.style.zIndex = 1000;
-          overlayRef.appendChild(draggableValueElement);
+          overlayRef.appendChild(element);
           overlayRef.addEventListener("mousemove", onDraggedElementMove, true);
         };
-        draggableValueElement.onmouseup = () => {
+        element.onmouseup = () => {
           overlayRef.removeEventListener(
             "mousemove",
             onDraggedElementMove,
             true
           );
-          overlayRef.removeChild(draggableValueElement);
+          overlayRef.removeChild(element);
           overlayRef.style.zIndex = -1000;
 
-          draggableValueElement.style.height = null;
-          draggableValueElement.style.width = null;
-          draggableValueElement.style.position = null;
-          draggableValueElement.style.left = null;
-          draggableValueElement.style.top = null;
+          element.style.height = null;
+          element.style.width = null;
+          element.style.position = null;
+          element.style.left = null;
+          element.style.top = null;
 
-          this.$el.appendChild(draggableValueElement);
+          this.$el.appendChild(element);
 
           dragging = false;
         };
