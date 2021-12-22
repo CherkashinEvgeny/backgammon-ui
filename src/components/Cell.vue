@@ -1,5 +1,5 @@
 <template lang="html">
-  <drag-and-drop :values="test">
+  <drag-and-drop :values="test" orientation="vertical">
     <chip side="white"></chip>
   </drag-and-drop>
 </template>
